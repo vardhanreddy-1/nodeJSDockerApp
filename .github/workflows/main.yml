@@ -79,7 +79,7 @@ jobs:
                                   password: ${{ secrets.DOCKERHUB_TOKEN }}
                           - name: Docker image Build
                             run: |
-                                  docker build --file D:\Git_Hub_Act_Presentation_April_2024\Node-proj-03\Dockerfile -t ${{env.IMG_NAME}}:0.0.1 . 
+                                  docker build --file "D:\Git_Hub_Act_Presentation_April_2024\Node-proj-03\Dockerfile"  -t ${{env.IMG_NAME}}:0.0.1 . 
                           - name: Tagging Docker image
                             run: docker tag ${{env.IMG_NAME}}:0.0.1 vardhanreddy035/${{env.IMG_NAME}}:0.0.1
                           - name: docker image push into docker hub
