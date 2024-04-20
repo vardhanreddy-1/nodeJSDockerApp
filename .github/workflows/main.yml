@@ -1,0 +1,88 @@
+name: Artifact
+on:
+    push:
+        branches: 
+             - main
+             - 'feature/*'
+    pull_request:
+        types:
+             - opened
+             - closed
+             - edited
+        branches:
+             - 'main'
+             - 'feature/*'
+    workflow_dispatch:
+jobs:
+        LintTestJob:
+            runs-on: 'ubuntu-latest'
+            steps:
+              - name: Get the code
+                uses: actions/checkout@v4
+                with:
+                     fetch-depth: 0
+              - name: Install nodeJS
+                uses: actions/setup-node@v4
+                with:
+                      node-version: '18'
+              - name: install Dependencies
+                run: npm ci
+              - name: Dependencies cache
+                uses: actions/cache@v4
+                with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-dep-cache-${{hashFiles('**/package.json')}}
+          
+              - name: Perform Lint test
+                run: npm run lint
+              - name: Perform test
+                run: npm run test
+        BuildJob:
+            needs: LintTestJob 
+            runs-on: 'ubuntu-latest'
+            steps:
+              - name: Get the code
+                uses: actions/checkout@v4
+                with:
+                     fetch-depth: 0
+              - name: Install nodeJS
+                uses: actions/setup-node@v4
+                with:
+                      node-version: '18'
+              - name: Cache the dependency
+                uses: actions/cache@v4
+                with:
+                       path: ~/.npm
+                       key: ${{runner.os}}-dep-cache-${{hashFiles('**/package.json')}}
+              - name: install Dependencies
+                run: npm ci
+              - name: Perform Build
+                run: npm run build
+              - name: upload Artifacts
+                uses: actions/upload-artifact@v4
+                with:
+                      name: dist-files
+                      path: dist/
+        DockerimageJob:
+                  env:
+                      IMG_NAME: njreactapp
+        
+                  needs: BuildJob 
+                  runs-on: 'ubuntu-latest'
+                  steps:
+                          - name: Docker version
+                            run: docker --version
+                          - name: Login to Docker Hub
+                            uses: docker/login-action@v3
+                            with:
+                                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+                          - name: Docker image Build
+                            run: |
+                                  docker build --file Dockerfile --tag ${{env.IMG_NAME}}:0.0.1 . 
+                          - name: Tagging Docker image
+                            run: docker tag ${{env.IMG_NAME}}:0.0.1 vardhanreddy035/${{env.IMG_NAME}}:0.0.1
+                          - name: docker image push into docker hub
+                            run: |
+                                    docker push vardhanreddy035/${{env.IMG_NAME}}:0.0.1
+                                    docker image ls   
