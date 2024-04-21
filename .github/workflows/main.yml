@@ -90,5 +90,5 @@ jobs:
                             run: docker tag ${{env.IMG_NAME}}:0.0.1 ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
                           - name: docker image push into docker hub
                             run: |
-                                    docker push vardhanreddy035/${{env.IMG_NAME}}:0.0.1
+                                    docker push ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
                                     docker image ls   
