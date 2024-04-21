@@ -2,7 +2,7 @@ name: Artifact
 on:
     push:
         branches: 
-             - main
+             - 'main'
              - 'feature/*'
     pull_request:
         types:
@@ -84,10 +84,10 @@ jobs:
                                   password: ${{ secrets.DOCKERHUB_TOKEN }}
                           - name: Docker image Build
                             run: |
-                                  docker build --file Dockerfile --tag njreactapp:0.0.1 .
+                                  docker build --file Dockerfile --tag ${{env.IMG_NAME}}:0.0.1 .
  
                           - name: Tagging Docker image
-                            run: docker tag ${{env.IMG_NAME}}:0.0.1 ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
+                            run: docker tag ${{env.IMG_NAME}}:0.0.1  ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
                           - name: docker image push into docker hub
                             run: |
                                     docker push ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
