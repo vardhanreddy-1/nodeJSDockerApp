@@ -64,6 +64,7 @@ jobs:
                       name: dist-files
                       path: dist/
         DockerimageJob:
+                  environment: docker_containerization
                   env:
                       IMG_NAME: conreactapp
                       DCKR_USER_NAME: vardhanreddy035
