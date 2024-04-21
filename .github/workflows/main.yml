@@ -65,7 +65,7 @@ jobs:
                       path: dist/
         DockerimageJob:
                   environment: docker_containerization
-                  env:
+                  env:          #Job Level environment Variable
                       IMG_NAME: conreactapp
                       DCKR_USER_NAME: vardhanreddy035
         
