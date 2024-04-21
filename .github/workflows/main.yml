@@ -65,7 +65,7 @@ jobs:
                       path: dist/
         DockerimageJob:
                   env:
-                      IMG_NAME: njreactapp
+                      IMG_NAME: conreactapp
                       DCKR_USER_NAME: vardhanreddy035
         
                   needs: BuildJob 
