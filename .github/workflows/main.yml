@@ -66,6 +66,7 @@ jobs:
         DockerimageJob:
                   env:
                       IMG_NAME: njreactapp
+                      DCKR_USER_NAME: vardhanreddy035
         
                   needs: BuildJob 
                   runs-on: 'ubuntu-latest'
@@ -86,7 +87,7 @@ jobs:
                                   docker build --file Dockerfile --tag njreactapp:0.0.1 .
  
                           - name: Tagging Docker image
-                            run: docker tag ${{env.IMG_NAME}}:0.0.1 vardhanreddy035/${{env.IMG_NAME}}:0.0.1
+                            run: docker tag ${{env.IMG_NAME}}:0.0.1 ${{env.DCKR_USER_NAME}}/${{env.IMG_NAME}}:0.0.1
                           - name: docker image push into docker hub
                             run: |
                                     docker push vardhanreddy035/${{env.IMG_NAME}}:0.0.1
